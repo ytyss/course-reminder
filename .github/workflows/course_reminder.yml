@@ -28,43 +28,6 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
-    - name: Determine current time and run appropriate reminder
+    - name: Run course reminder
       run: |
-        # 获取当前UTC时间
-        hour=$(date -u +%H)
-        minute=$(date -u +%M)
-        
-        # 根据时间运行不同类型的提醒
-        if [ $hour -eq 23 ] && [ $minute -ge 30 ] && [ $minute -le 50 ]; then
-          # 早上提醒（UTC 23:30-23:50，对应北京时间 7:30-7:50）
-          python -c "
-import sys
-sys.path.append('.')
-from course_reminder import morning_reminder
-morning_reminder()
-          "
-        elif [ $hour -eq 5 ] && [ $minute -ge 0 ] && [ $minute -le 20 ]; then
-          # 下午提醒（UTC 5:00-5:20，对应北京时间 13:00-13:20）
-          python -c "
-import sys
-sys.path.append('.')
-from course_reminder import afternoon_reminder
-afternoon_reminder()
-          "
-        elif [ $hour -eq 13 ] && [ $minute -ge 0 ] && [ $minute -le 20 ]; then
-          # 晚上提醒（UTC 13:00-13:20，对应北京时间 21:00-21:20）
-          python -c "
-import sys
-sys.path.append('.')
-from course_reminder import daily_summary
-daily_summary()
-          "
-        else
-          # 其他时间运行周课表提醒
-          python -c "
-import sys
-sys.path.append('.')
-from course_reminder import weekly_reminder
-weekly_reminder()
-          "
-        fi
+        python course_reminder.py
